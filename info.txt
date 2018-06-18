@@ -1,0 +1,21 @@
+Elasticsearch terms :
+Elasticsearch version: 6.2.2, kibana version: 6.2.2
+
+cluster: collection of multiple nodes(server).
+Node: its represent a single server.
+index: its a collection of documents.
+type: partition of index.
+document: basic unit of information
+
+Type of queries in elasticsearch
+
+put: for create the index & save document
+get: for search the document
+post: for update the document
+delete: for delete the index & document
+
+cluster health:
+
+green: everything is good, cluster fully functional.
+yellow: all data is available but some replicas are not allocated.
+red: some data is not available for whatever reason.

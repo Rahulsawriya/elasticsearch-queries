@@ -1,0 +1,145 @@
+index_name = bank
+===============match query====================================
+GET /bank/_search
+{
+  "query": { "match": { "address": "mill" } } || This example returns all accounts containing the term "mill" in the address
+  "query": { "match": { "address": "mill lane" } } || This example is a variant of match (match_phrase) that returns all 
+  accounts containing the phrase "mill lane" in the address
+}
+==============================================================
+
+==================and query ==================================
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+===============================================================
+
+===============or query =======================================
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+===============================================================
+
+==================not match ===================================
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+================================================================
+
+==================must or must not==============================
+This example returns all accounts of anybody who is 40 years old but doesn’t live in ID(aho):
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "age": "40" } }
+      ],
+      "must_not": [
+        { "match": { "state": "ID" } }
+      ]
+    }
+  }
+}
+==================================================================
+
+===================range query====================================
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must": { "match_all": {} },
+        "filter": {
+          "range": {
+            "balance": {
+              "gte": 20000,
+              "lte": 30000
+            }
+          }
+        }
+      }
+    }
+  }
+}
+==================================================================
+
+==================regex query with must===========================
+GET bank/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match": {
+          "city": "pune"
+        }
+      },
+      "filter": {
+        "regexp": {
+          "name": ".*ram"
+        }
+      }
+    }
+  }
+}
+====================================================================
+
+====================multimatch with exists query=========================================
+GET /bank/_search
+{
+  "query": {
+    "filtered": {
+      "query": {
+        "bool": {
+          "must": [
+            {"multi_match": {
+              "query": "dilip singh",
+              "fields": ["field_1", "field_2"],
+              "type": "phrase"
+            }},
+            {"multi_match": {
+              "query": "mahindra",
+              "fields": ["field_3", "field_4"],
+              "type": "phrase"
+            }},
+            {"match": {
+             "state": "field_5"
+            }},
+            {"match": {
+              "district": "field_6"
+            }}
+          ]
+        }
+      },
+      "filter": {
+        "exists": {
+          "field": "field_name"
+        }
+      }
+    }
+  }
+}
+========================================================================================

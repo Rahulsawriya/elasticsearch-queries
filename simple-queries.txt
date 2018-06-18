@@ -1,0 +1,73 @@
+Note : all queries is based on kibana sense
+here index_name = customer, type = _doc
+
+GET /_cat/health?v || for cluster health
+GET /_cat/nodes?v || list of nodes
+GET /_cat/indices?v || list of index
+GET customer/_search || find index
+GET customer/_mapping || find the mapping of index
+PUT /index_name?pretty || for create the new index
+DELETE /customer || delete index
+DELETE /customer/_doc/2?pretty || delete specific document || <REST Verb> /<Index>/<Type>/<ID>
+
+PUT /customer/_settings || for set the number for replica
+{
+  "index" : {
+    "number_of_replicas" : 0
+  }
+}
+
+======for save document========
+PUT /customer/_doc/1?pretty  || <REST Verb> /<Index>/<Type>/<ID> || after every hit, elastic update the document
+{
+  "name": "John Doe"
+}
+===============================
+
+==============for update the document======
+POST /customer/_doc/1/_update?pretty
+{
+  "doc": { "name": "Jane Doe", "age": 20 }
+}
+
+POST /customer/_doc/1/_update?pretty || through script, increment age by 5
+{
+  "script" : "ctx._source.age += 5" || ctx._source refers to the current source document that is about to be updated.
+}
+===========================================
+
+==========get specific fields==============
+GET /customer/_search
+{
+  "query": { "match_all": {} },
+  "_source": ["name", "age"]
+}
+===========================================
+
+=======search specific number of documents===
+GET /customer/_search
+{
+  "query": { "match_all": {} },
+  "from": 3,
+  "size": 3
+}
+==============================================
+
+==========sort=============================
+GET /customer/_search
+{
+  "query": { "match_all": {} },
+  "sort": { "age": { "order": "asc" } }
+}
+===========================================
+
+============regex=========================
+GET customer/_search
+{
+  "query": {
+    "regexp": {
+      "name": ".*ram"
+    }
+  }
+}
+==========================================
