@@ -1,0 +1,21 @@
+fetch all the employees who are celebrating their 2nd, 5th and multiple of 5th anniversaries particularly in the month of August.
+
+GET employee/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "script": {
+          "script": {
+            "source":  "(doc['hiredate'].date.monthOfYear == 8) && ((Calendar.getInstance().get(Calendar.YEAR)-doc['hiredate'].date.year) % 5 ==0 || (Calendar.getInstance().get(Calendar.YEAR)-doc['hiredate'].date.year) /2  ==1)" 
+          }
+        }
+      }
+    }
+  }
+}
+
+Note: 
+Calendar.getInstance().get(Calendar.YEAR) = get the current year
+doc['hiredate'].date.monthOfYear = get the hiredate month
+doc['hiredate'].date.year = get hiredate year
